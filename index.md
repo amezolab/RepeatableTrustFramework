@@ -1,8 +1,5 @@
----
-layout: home
-title: Home
----
+### Blog
 
-Welcome to my blog.
-
-I write about systems thinking, law, AI governance, and infrastructure.
+- [AI Governance — Technical](/RepeatableTrustFramework/blog/ai-governance-technical.html)
+- [AI Governance — Non‑Technical](/RepeatableTrustFramework/blog/ai-governance-nontechnical.html)
+``
