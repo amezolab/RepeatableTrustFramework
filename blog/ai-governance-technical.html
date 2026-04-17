@@ -1,23 +1,427 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>AI Governance – Technical</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The System That Makes AI Defensible for Law Firms | Jose Amezola Beltran</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Source+Sans+3:wght@300;400;600;700&family=Source+Code+Pro:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:#1B2A4A; --navy-deep:#111E35; --gold:#C49A3C; --gold-light:#DDB96A;
+  --teal:#0D6E6E; --cream:#FAFAF7; --white:#FFFFFF; --mid:#5A6478;
+  --light:#9AA3B2; --border:#E2E6EE; --red:#B33A3A; --red-pale:#FDF0F0;
+  --green:#1A7A4A; --green-pale:#E8F5EE; --gold-pale:#FDF6E3; --teal-pale:#E0F2F2;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--cream);font-family:'Source Sans 3',sans-serif;color:var(--navy-deep);line-height:1.75;}
+.site-header{background:var(--navy-deep);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;}
+.site-header .logo{font-family:'Source Code Pro',monospace;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);}
+.site-header .series-tag{font-family:'Source Code Pro',monospace;font-size:10px;letter-spacing:.15em;text-transform:uppercase;color:rgba(255,255,255,.4);}
+.hero{background:var(--navy-deep);padding:80px 24px 64px;text-align:center;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 40% at 20% 50%,rgba(13,110,110,.12) 0%,transparent 60%),radial-gradient(ellipse 50% 50% at 80% 30%,rgba(196,154,60,.08) 0%,transparent 60%);pointer-events:none;}
+.hero-eyebrow{font-family:'Source Code Pro',monospace;font-size:11px;letter-spacing:.25em;text-transform:uppercase;color:var(--gold);margin-bottom:20px;position:relative;}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(28px,5vw,52px);color:var(--white);line-height:1.15;margin-bottom:20px;max-width:820px;margin-left:auto;margin-right:auto;position:relative;}
+.hero h1 em{color:var(--gold-light);font-style:italic;}
+.hero-sub{font-size:18px;color:rgba(255,255,255,.6);max-width:600px;margin:0 auto 24px;font-weight:300;line-height:1.65;position:relative;}
+.hero-byline{font-family:'Source Code Pro',monospace;font-size:12px;color:rgba(255,255,255,.35);letter-spacing:.08em;position:relative;}
+.hero-byline a{color:var(--gold);text-decoration:none;}
+.hero-series-note{margin-top:20px;font-size:13px;color:rgba(255,255,255,.4);font-style:italic;position:relative;}
+.hero-series-note a{color:var(--gold-light);}
+.container{max-width:780px;margin:0 auto;padding:0 24px;}
+.article{padding:64px 0 96px;}
+.series-note-bar{font-size:14px;color:var(--mid);font-style:italic;border-left:3px solid var(--gold);padding:12px 20px;margin-bottom:48px;background:var(--gold-pale);border-radius:0 8px 8px 0;}
+.series-note-bar a{color:var(--teal);}
+h2{font-family:'Playfair Display',serif;font-size:clamp(22px,3vw,30px);color:var(--navy);margin:60px 0 16px;padding-bottom:10px;border-bottom:2px solid var(--gold);line-height:1.25;}
+h3{font-size:12px;font-weight:700;color:var(--teal);margin:28px 0 8px;letter-spacing:.12em;text-transform:uppercase;}
+p{font-size:16px;color:#2E3444;margin-bottom:20px;line-height:1.8;}
+strong{color:var(--navy);font-weight:600;}
+a{color:var(--teal);}
+hr{border:none;border-top:1px solid var(--border);margin:40px 0;}
+.pain-box{background:var(--red-pale);border-left:4px solid var(--red);border-radius:0 10px 10px 0;padding:28px 32px;margin:0 0 32px;}
+.pain-box-label{font-family:'Source Code Pro',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--red);margin-bottom:12px;}
+.pain-box ul{list-style:none;padding:0;}
+.pain-box ul li{font-size:15px;color:#4A2020;padding:7px 0 7px 22px;position:relative;line-height:1.6;border-bottom:1px solid rgba(179,58,58,.1);}
+.pain-box ul li:last-child{border-bottom:none;}
+.pain-box ul li::before{content:'▶';position:absolute;left:0;color:var(--red);font-size:10px;top:10px;}
+.pain-box .stat{font-weight:700;color:var(--red);}
+.callout{background:var(--navy);border-radius:12px;padding:28px 36px;margin:32px 0;}
+.callout p{font-family:'Playfair Display',serif;font-size:clamp(17px,2.5vw,22px);color:var(--white);margin:0;line-height:1.5;font-style:italic;}
+.callout p em{color:var(--gold-light);font-style:normal;}
+.prompt-grid{display:grid;gap:16px;margin:24px 0 32px;}
+.prompt-card{border:1px solid var(--border);border-radius:12px;padding:22px 26px;background:var(--white);border-left:4px solid var(--teal);}
+.prompt-card.gold-accent{border-left-color:var(--gold);}
+.prompt-card.navy-accent{border-left-color:var(--navy);}
+.card-label{font-family:'Source Code Pro',monospace;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--light);margin-bottom:6px;}
+.card-title{font-size:16px;font-weight:700;color:var(--navy);margin-bottom:8px;}
+.card-body{font-size:14px;color:var(--mid);line-height:1.65;margin:0;}
+.card-benefit{font-size:13px;color:var(--green);font-weight:600;margin-top:10px;padding-top:10px;border-top:1px solid var(--border);}
+.composite-sample{background:var(--navy-deep);border-radius:14px;padding:32px 36px;margin:40px 0;border:1px solid rgba(196,154,60,.3);}
+.composite-sample-label{font-family:'Source Code Pro',monospace;font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;}
+.composite-sample .cs-title{font-family:'Playfair Display',serif;font-size:20px;color:var(--gold-light);font-style:italic;margin-bottom:12px;font-weight:400;}
+.composite-sample p{color:rgba(255,255,255,.65);font-size:14px;line-height:1.7;margin-bottom:16px;}
+.sample-link-btn{display:inline-flex;align-items:center;gap:10px;background:var(--gold);color:var(--navy-deep);padding:12px 24px;border-radius:8px;font-weight:700;font-size:14px;text-decoration:none;letter-spacing:.03em;transition:background .2s;}
+.sample-link-btn:hover{background:var(--gold-light);color:var(--navy-deep);}
+.sample-link-btn::after{content:'→';font-size:16px;}
+.sample-placeholder{font-family:'Source Code Pro',monospace;font-size:11px;color:rgba(255,255,255,.25);margin-top:12px;display:block;}
+.vs-table{width:100%;border-collapse:collapse;margin:24px 0 32px;font-size:14px;}
+.vs-table th{background:var(--navy);color:var(--white);padding:12px 16px;text-align:left;font-weight:600;}
+.vs-table th:first-child{border-radius:8px 0 0 0;}
+.vs-table th:last-child{border-radius:0 8px 0 0;}
+.vs-table td{padding:11px 16px;border-bottom:1px solid var(--border);vertical-align:top;line-height:1.55;color:#2E3444;}
+.vs-table tr:nth-child(even) td{background:#F8F9FB;}
+.vs-table .col-rtf{background:var(--teal-pale)!important;}
+.check{color:var(--green);font-weight:700;}
+.output-list{list-style:none;padding:0;margin:24px 0 32px;}
+.output-list li{display:flex;gap:16px;padding:14px 0;border-bottom:1px solid var(--border);align-items:flex-start;}
+.output-list li:last-child{border-bottom:none;}
+.output-num{font-family:'Source Code Pro',monospace;font-size:11px;color:var(--gold);background:var(--navy);border-radius:4px;padding:3px 8px;white-space:nowrap;margin-top:2px;flex-shrink:0;}
+.output-text strong{display:block;font-size:15px;color:var(--navy);margin-bottom:3px;}
+.output-text span{font-size:13px;color:var(--mid);line-height:1.5;}
+.highlight{background:var(--gold-pale);border:1px solid rgba(196,154,60,.3);border-radius:10px;padding:22px 28px;margin:24px 0;}
+.highlight p{font-size:15px;color:#4A3A10;margin:0;line-height:1.7;}
+.scale-row{display:flex;gap:10px;margin:20px 0 28px;flex-wrap:wrap;}
+.scale-pill{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:12px 16px;flex:1;min-width:100px;text-align:center;}
+.scale-pill .pill-label{font-family:'Source Code Pro',monospace;font-size:9px;letter-spacing:.15em;text-transform:uppercase;color:var(--light);display:block;margin-bottom:4px;}
+.scale-pill .pill-name{font-size:13px;font-weight:700;color:var(--navy);display:block;}
+.sources{margin-top:64px;padding-top:24px;border-top:1px solid var(--border);}
+.sources h4{font-family:'Source Code Pro',monospace;font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--light);margin-bottom:12px;}
+.sources ol{padding-left:20px;}
+.sources ol li{font-size:12px;color:var(--light);line-height:1.6;margin-bottom:4px;}
+.closing{background:var(--navy-deep);padding:56px 24px;text-align:center;margin-top:64px;}
+.closing .tagline{font-family:'Playfair Display',serif;font-size:clamp(20px,3vw,28px);color:var(--white);margin-bottom:16px;line-height:1.4;}
+.closing .tagline em{color:var(--gold-light);font-style:italic;}
+.closing .cta{font-size:16px;color:rgba(255,255,255,.65);margin-bottom:24px;}
+.closing .byline{font-family:'Source Code Pro',monospace;font-size:12px;color:rgba(255,255,255,.35);letter-spacing:.08em;}
+.closing .byline a{color:var(--gold);text-decoration:none;}
+@media(max-width:600px){
+  .hero{padding:48px 20px 40px;}.article{padding:36px 0 56px;}h2{margin-top:40px;}
+  .pain-box,.callout,.highlight,.composite-sample{padding:20px 22px;}
+  .vs-table{font-size:12px;}.vs-table th,.vs-table td{padding:8px 10px;}
+  .scale-row{gap:8px;}.scale-pill{min-width:80px;}
+}
+</style>
 </head>
 <body>
 
-  <h1>AI Governance (Technical)</h1>
+<header class="site-header">
+  <div class="logo">Jose Amezola Beltran · JD</div>
+  <div class="series-tag"><a href="https://amezolab.github.io/RepeatableTrustFramework/blog/ai-governance-technical.html" style="color:rgba(255,255,255,.4);text-decoration:none;">Repeatable Trust Framework™ Series · Post 0 — Technical</a></div>
+</header>
 
-  <p>This is the technical version of the article.</p>
+<section class="hero">
+  <div class="hero-eyebrow">Building Defensible AI for Law Firms — The Repeatable Trust Framework Series</div>
+  <h1>The System That Makes AI <em>Defensible</em> for Law Firms</h1>
+  <p class="hero-sub">Most legal AI tools generate text. The Repeatable Trust Framework™ generates governed, auditable, firm-specific work product — built inside the infrastructure your firm already owns.</p>
+  <p class="hero-byline">Jose Amezola Beltran · JD · Legal Technologist · <a href="mailto:jose@joseamezola.com">jose@joseamezola.com</a></p>
+  <p class="hero-series-note"><em>This post is part of my ongoing series on governed AI for law firms — the Repeatable Trust Framework™. A <a href="https://amezolab.github.io/RepeatableTrustFramework/blog/ai-governance-nontechnical.html">non-technical version</a> of this post is also available.</em></p>
+</section>
 
-  <p>
-    <a href="./ai-governance-nontechnical.html">
-      Read the non-technical version →
-    </a>
-  </p>
+<main class="container">
+<article class="article">
 
-  <p>Content coming soon.</p>
+  <p class="series-note-bar"><strong>Updated April 2026.</strong> This is the expanded and updated edition of <a href="https://www.linkedin.com/pulse/beyond-prompts-how-systems-thinking-creates-ai-law-amezola-beltran-kpylc"><em>Beyond Prompts: How Systems Thinking Creates Repeatable, Defensible AI Outcomes for Law Firms</em></a>. That post has been superseded by this one. As the framework evolves, updates will be incorporated into this post and noted at the top. <a href="https://amezolab.github.io/RepeatableTrustFramework/blog/ai-governance-technical.html">Permanent link to this post.</a></p>
+
+  <h2>The Problem: Seven Things Already Happening at Your Firm</h2>
+
+  <p>Before describing the framework, the problem deserves to be stated precisely. These are not hypothetical concerns. They are documented, current, and growing.</p>
+
+  <div class="pain-box">
+    <div class="pain-box-label">Documented — Current — Growing</div>
+    <ul>
+      <li><span class="stat">1,031+ documented cases</span> of AI hallucinations in legal filings globally, growing at 30 to 50 new cases per month. Am Law 100 firms are affected. No firm size is immune.<sup>[1]</sup></li>
+      <li><span class="stat">17–34% hallucination rates</span> in purpose-built legal AI tools marketed as hallucination-free. In one documented case, nine of 27 citations in a single brief were wrong — including two completely fabricated cases.<sup>[2]</sup></li>
+      <li><span class="stat">68%</span> of legal professionals have used unapproved AI tools at least once. Less than 20% of firms have formal governance policies. Client data is entering consumer AI applications daily with no oversight.<sup>[3]</sup></li>
+      <li><span class="stat">More than half</span> of firms have provided no AI training to attorneys and have no plans to do so. Adoption is outpacing governance everywhere.<sup>[4]</sup></li>
+      <li><span class="stat">20% associate attrition</span> annually. When attorneys leave, institutional knowledge — the arguments that worked, the drafting standards that won — leaves with them.<sup>[5]</sup></li>
+      <li>Generic AI outputs that do not reflect the firm's standards, voice, or accumulated judgment. Every platform generates the same way for every firm.</li>
+      <li>Fragmented workflows, multiple subscriptions, no unified audit trail, no unified accountability for what the AI produced and when.</li>
+    </ul>
+  </div>
+
+  <div class="callout">
+    <p>The legal profession does not have an AI problem. It has a <em>governance</em> problem. AI tools are everywhere. Governed AI systems are almost nowhere.</p>
+  </div>
+
+  <h2>The Gap the Repeatable Trust Framework™ Is Built to Fill</h2>
+
+  <p>Legal AI tools have proliferated rapidly. Research platforms. Drafting assistants. Contract review engines. Document summarizers. Most are genuinely useful. Most also share a common limitation: they operate on the attorney's behalf, but not within the firm's institutional framework. They generate output from broad training data — not from what <em>this firm</em> knows, how <em>this firm</em> drafts, which authorities <em>this firm</em> relies on.</p>
+
+  <p>The gap is not a technology gap. It is a governance gap. The AI tools exist. The governance layer that makes those tools defensible, firm-specific, and institutionally grounded does not.</p>
+
+  <p style="padding-left:16px; border-left:3px solid var(--teal); margin-bottom:8px; font-size:15px; color:#2E3444;">Harvey finds the law and drafts the argument.</p>
+  <p style="padding-left:16px; border-left:3px solid var(--teal); margin-bottom:8px; font-size:15px; color:#2E3444;">CoCounsel researches the question and surfaces the precedents.</p>
+  <p style="padding-left:16px; border-left:3px solid var(--teal); margin-bottom:8px; font-size:15px; color:#2E3444;">Westlaw verifies the citations.</p>
+  <p style="padding-left:16px; border-left:3px solid var(--navy); margin-bottom:20px; font-size:15px; font-weight:700; color:var(--navy);">The Repeatable Trust Framework™ governs the entire process.</p>
+
+  <p>The RTF does not replace any of those tools. It is the foundation they build on. A document produced by the Repeatable Trust Framework™ and extended with CoCounsel research has both depth and governance. Without it, the depth exists but the governance does not.</p>
+
+  <h2>What the Repeatable Trust Framework™ Is</h2>
+
+  <p>The Repeatable Trust Framework™ is a governed document intelligence system for law firms. It is not a software product purchased from a vendor. It is a system deployed inside the firm's existing Microsoft 365 environment — built on tools the firm already owns, maintained by the firm's own IT team, and configured to reflect the firm's specific standards, jurisdictions, and institutional knowledge.</p>
+
+  <div class="callout"><p><em>The AI comes to the data. The data does not go to the AI.</em></p></div>
+
+  <p>No client information, matter data, or work product ever leaves the firm's controlled environment. The system runs entirely inside the firm's Microsoft 365 tenant using Azure OpenAI under the firm's enterprise agreement. Three Microsoft-confirmed architectural facts: no cross-tenant data contamination; Azure OpenAI priced by token consumption, not per seat; customer prompts and completions are not used to retrain foundation models.<sup>[9]</sup> Data residency is not a contractual promise from a vendor. It is an architectural fact.</p>
+
+  <h2>How It Is Built</h2>
+
+  <p>The Repeatable Trust Framework™ runs entirely on the Microsoft Power Platform — a suite of tools included in most Microsoft 365 business subscriptions. No custom software. No external servers. Everything runs inside the firm's own Microsoft environment.</p>
+
+  <p>Four tools do the work. <strong>Power Apps</strong> is the interface attorneys and administrators use — the screens where a matter is submitted, reports are managed, and verification flags are cleared. Generated documents open directly in Microsoft Word — not inside the app. <strong>Power Automate</strong> is the automation engine — it assembles the prompts, retrieves the legal authorities, calls the AI, packages the outputs, and logs every action, all without manual steps. <strong>Dataverse</strong> is the structured database where all of the firm's data lives — authorities, prompts, documents, and the complete audit trail. <strong>Power BI</strong> turns that data into dashboards — knowledge gaps, approval cycle times, and system performance — readable at a glance by firm leadership.</p>
+
+  <p>Together these four tools form a complete system that runs on infrastructure the firm already owns.</p>
+
+
+  <h2>The Workflow: Step by Step</h2>
+
+  <p>Here is the complete sequence from the moment an attorney opens the system to the moment a document is ready for review.</p>
+
+  <ol style="list-style:none;padding:0;margin:0 0 32px;counter-reset:workflow-counter;">
+    <li style="display:flex;gap:16px;padding:14px 0;border-bottom:1px solid var(--border);align-items:flex-start;">
+      <span style="font-family:'Source Code Pro',monospace;font-size:11px;color:var(--gold);background:var(--navy);border-radius:4px;padding:3px 10px;white-space:nowrap;margin-top:2px;flex-shrink:0;">Step 1</span>
+      <div><strong style="display:block;font-size:15px;color:var(--navy);margin-bottom:3px;">The attorney opens the application</strong><span style="font-size:13px;color:var(--mid);line-height:1.6;">Power Apps — the firm's internal application — opens on their browser or desktop. They see their active matters, pending approvals, and any documents awaiting their review.</span></div>
+    </li>
+    <li style="display:flex;gap:16px;padding:14px 0;border-bottom:1px solid var(--border);align-items:flex-start;">
+      <span style="font-family:'Source Code Pro',monospace;font-size:11px;color:var(--gold);background:var(--navy);border-radius:4px;padding:3px 10px;white-space:nowrap;margin-top:2px;flex-shrink:0;">Step 2</span>
+      <div><strong style="display:block;font-size:15px;color:var(--navy);margin-bottom:3px;">They select the parameters</strong><span style="font-size:13px;color:var(--mid);line-height:1.6;">From dropdown menus: client, matter, practice area, document type, document subtype, and jurisdiction. Each selection is a structured lookup — no free text, no ambiguity.</span></div>
+    </li>
+    <li style="display:flex;gap:16px;padding:14px 0;border-bottom:1px solid var(--border);align-items:flex-start;">
+      <span style="font-family:'Source Code Pro',monospace;font-size:11px;color:var(--gold);background:var(--navy);border-radius:4px;padding:3px 10px;white-space:nowrap;margin-top:2px;flex-shrink:0;">Step 3</span>
+      <div><strong style="display:block;font-size:15px;color:var(--navy);margin-bottom:3px;">They select the reports they want generated</strong><span style="font-size:13px;color:var(--mid);line-height:1.6;">All reports are checked by default — the governed first draft, the counterargument report, the strategic angles report, the cited authorities report, and the ethical considerations report. The attorney unchecks any they do not need for this matter.</span></div>
+    </li>
+    <li style="display:flex;gap:16px;padding:14px 0;border-bottom:1px solid var(--border);align-items:flex-start;">
+      <span style="font-family:'Source Code Pro',monospace;font-size:11px;color:var(--gold);background:var(--navy);border-radius:4px;padding:3px 10px;white-space:nowrap;margin-top:2px;flex-shrink:0;">Step 4</span>
+      <div><strong style="display:block;font-size:15px;color:var(--navy);margin-bottom:3px;">They enter the case facts</strong><span style="font-size:13px;color:var(--mid);line-height:1.6;">The attorney types the matter-specific facts into the Context Prompt field — client name, the specific legal question, the relevant facts, the relief sought. This is the attorney's contribution to the composite prompt. It is logged permanently and can be reused on future generation events for the same matter.</span></div>
+    </li>
+    <li style="display:flex;gap:16px;padding:14px 0;border-bottom:1px solid var(--border);align-items:flex-start;">
+      <span style="font-family:'Source Code Pro',monospace;font-size:11px;color:var(--gold);background:var(--navy);border-radius:4px;padding:3px 10px;white-space:nowrap;margin-top:2px;flex-shrink:0;">Step 5</span>
+      <div><strong style="display:block;font-size:15px;color:var(--navy);margin-bottom:3px;">They assign an approver and hit Generate</strong><span style="font-size:13px;color:var(--mid);line-height:1.6;">The attorney selects a named approver, self-approval, or marks the document as not requiring approval. Then they submit. Everything that follows is automated.</span></div>
+    </li>
+    <li style="display:flex;gap:16px;padding:14px 0;border-bottom:1px solid var(--border);align-items:flex-start;">
+      <span style="font-family:'Source Code Pro',monospace;font-size:11px;color:var(--gold);background:var(--navy);border-radius:4px;padding:3px 10px;white-space:nowrap;margin-top:2px;flex-shrink:0;">Step 6</span>
+      <div><strong style="display:block;font-size:15px;color:var(--navy);margin-bottom:3px;">The system assembles the composite prompt</strong><span style="font-size:13px;color:var(--mid);line-height:1.6;">Power Automate — the automation engine — retrieves the firm's drafting standard for the selected document subtype, the legal framework for the selected jurisdiction, and the attorney's case facts. It assembles all three into a single set of instructions for the AI. See the visual below.</span></div>
+    </li>
+    <li style="display:flex;gap:16px;padding:14px 0;border-bottom:1px solid var(--border);align-items:flex-start;">
+      <span style="font-family:'Source Code Pro',monospace;font-size:11px;color:var(--gold);background:var(--navy);border-radius:4px;padding:3px 10px;white-space:nowrap;margin-top:2px;flex-shrink:0;">Step 7</span>
+      <div><strong style="display:block;font-size:15px;color:var(--navy);margin-bottom:3px;">The system retrieves verified legal authorities</strong><span style="font-size:13px;color:var(--mid);line-height:1.6;">The system checks the firm's Authority Source Library first. If the relevant verified authorities are there, it uses them. Only if the library returns no results for the applicable practice area and jurisdiction does the system call an external platform like Westlaw as a fallback. External results are always flagged for attorney verification.</span></div>
+    </li>
+    <li style="display:flex;gap:16px;padding:14px 0;border-bottom:1px solid var(--border);align-items:flex-start;">
+      <span style="font-family:'Source Code Pro',monospace;font-size:11px;color:var(--gold);background:var(--navy);border-radius:4px;padding:3px 10px;white-space:nowrap;margin-top:2px;flex-shrink:0;">Step 8</span>
+      <div><strong style="display:block;font-size:15px;color:var(--navy);margin-bottom:3px;">The AI generates the outputs</strong><span style="font-size:13px;color:var(--mid);line-height:1.6;">Azure OpenAI receives the complete composite prompt and generates all selected outputs simultaneously. The full JSON response is stored permanently in Dataverse — the structured database — enabling deterministic replay later.</span></div>
+    </li>
+    <li style="display:flex;gap:16px;padding:14px 0;border-bottom:1px solid var(--border);align-items:flex-start;">
+      <span style="font-family:'Source Code Pro',monospace;font-size:11px;color:var(--gold);background:var(--navy);border-radius:4px;padding:3px 10px;white-space:nowrap;margin-top:2px;flex-shrink:0;">Step 9</span>
+      <div><strong style="display:block;font-size:15px;color:var(--navy);margin-bottom:3px;">The document and reports land in the client's SharePoint folder automatically</strong><span style="font-size:13px;color:var(--mid);line-height:1.6;">The governed first draft is saved as a native Word document (.docx) directly into the matter's SharePoint folder. All selected reports are saved to the same folder. No manual download, no export step — the files are just there, exactly where the firm already stores its documents.</span></div>
+    </li>
+    <li style="display:flex;gap:16px;padding:14px 0;border-bottom:1px solid var(--border);align-items:flex-start;">
+      <span style="font-family:'Source Code Pro',monospace;font-size:11px;color:var(--gold);background:var(--navy);border-radius:4px;padding:3px 10px;white-space:nowrap;margin-top:2px;flex-shrink:0;">Step 10</span>
+      <div><strong style="display:block;font-size:15px;color:var(--navy);margin-bottom:3px;">The attorney reviews the outputs</strong><span style="font-size:13px;color:var(--mid);line-height:1.6;">The governed first draft opens directly in Microsoft Word from SharePoint — the attorney works in Word, not inside the app. The supporting reports are also available in the SharePoint folder. The attorney uses the app to clear Verification Required flags on any citations that came from outside the firm's verified library, then submits for approval.</span></div>
+    </li>
+    <li style="display:flex;gap:16px;padding:14px 0;border-bottom:1px solid var(--border);align-items:flex-start;">
+      <span style="font-family:'Source Code Pro',monospace;font-size:11px;color:var(--gold);background:var(--navy);border-radius:4px;padding:3px 10px;white-space:nowrap;margin-top:2px;flex-shrink:0;">Step 11</span>
+      <div><strong style="display:block;font-size:15px;color:var(--navy);margin-bottom:3px;">The approver reviews and approves</strong><span style="font-size:13px;color:var(--mid);line-height:1.6;">The named approver receives a notification, reviews the document and outputs, and approves or rejects with a logged reason. Every approval decision is recorded with the approver's identity and timestamp.</span></div>
+    </li>
+  </ol>
+
+  
+  <h2>How the System Works: Three Layers</h2>
+
+  <h3>Layer 1 — The Composite Prompt Architecture</h3>
+
+  <p>Most firms experimenting with AI end up with prompt sprawl — dozens of unversioned prompts circulating in email threads and Word documents, with no version control and no governance. Nobody knows which version is current. When the law changes, nobody knows which prompts need updating. When the attorney who wrote the prompt leaves, the prompt is gone.</p>
+
+  <p>The RTF replaces hundreds of individual prompts with three independently versioned variables. A firm with five practice areas, ten document types, and fifteen jurisdictions manages 25 versioned records — not 750 prompt combinations.</p>
+
+  <div class="prompt-grid">
+    <div class="prompt-card">
+      <div class="card-label">Variable 1 · Firm Level</div>
+      <div class="card-title">Requirements Prompt</div>
+      <p class="card-body">The firm's drafting standard for a specific document type — encoded once, versioned, owned by the Practice Group Leader. Required sections, argument ordering, citation format, tone, output structure. Prompts are embedded in the system, not stored in Word documents. Every attorney always uses the current version automatically.</p>
+      <div class="card-benefit">✓ Institutional drafting standards applied to every generation event regardless of which attorney is working.</div>
+    </div>
+    <div class="prompt-card gold-accent">
+      <div class="card-label">Variable 2 · Jurisdiction Level</div>
+      <div class="card-title">Jurisdictional Prompt</div>
+      <p class="card-body">The controlling legal context for a specific jurisdiction — independently versioned per jurisdiction. Controlling statutes, procedural rules, citation norms. When the law changes in one jurisdiction, only that jurisdiction's prompt is updated. All others are unaffected.</p>
+      <div class="card-benefit">✓ The governing legal framework is pre-verified and always current — not reconstructed from scratch on every matter.</div>
+    </div>
+    <div class="prompt-card navy-accent">
+      <div class="card-label">Variable 3 · Matter Level</div>
+      <div class="card-title">Context Prompt</div>
+      <p class="card-body">The case-specific facts entered by the attorney for each generation event — client name, legal question, relevant facts, relief sought. Logged permanently and immutably with attorney identity, date, matter, and document type. Reusable on future events for the same matter.</p>
+      <div class="card-benefit">✓ The attorney's judgment is captured. The full context record survives personnel changes and gaps between sessions.</div>
+    </div>
+  </div>
+
+  <p>These three variables assemble at runtime into a single <strong>Composite Prompt</strong> submitted to Azure OpenAI. The <strong>Composite Prompt Transparency Document</strong> — produced with every generation event — shows exactly what the AI was told: prompt version numbers, context text, and the complete input record. No black boxes.</p>
+
+  <!-- COMPOSITE PROMPT SAMPLE SECTION -->
+  <div class="composite-sample">
+    <div class="composite-sample-label">See It In Action — Real Composite Prompt Example</div>
+    <div class="cs-title">I-601A Provisional Unlawful Presence Waiver — Immigration</div>
+    <p>The composite prompt below is a real example from the Repeatable Trust Framework™ immigration practice area deployment. It shows all three variables assembled: the Requirements Prompt specifying the required document structure, evidentiary rules, and prohibitions; the Jurisdictional Prompt encoding federal immigration law, USCIS adjudication standards, and the extreme hardship framework; and the Context Prompt template the attorney completes for each specific client.</p>
+    <p>This is what the AI receives before generating a single word of the support letter. Notice what the AI is not doing: it is not generating citations from training data, not inventing procedural rules, not guessing at the required structure. All of that is already specified. The AI's job is to write within the constraints — not to determine what the constraints are.</p>
+    <!-- REPLACE HREF WITH YOUR ACTUAL COMPOSITE PROMPT FILE LINK -->
+    <a class="sample-link-btn" href="https://joseamezola-my.sharepoint.com/:b:/p/jose/IQAuCc9tb0btS5eQk6IjtRE3AU2FV_qma1E5VYHscjWsuzg?e=BO2QjA">View the Full Composite Prompt Example</a>
+  </div>
+
+  <h3>Layer 2 — The Authority Source Library</h3>
+
+  <p>Every other legal AI platform generates citations. The RTF retrieves them. This is not a marketing distinction. It is an architectural one with direct professional responsibility implications.</p>
+
+  <p>The <strong>Authority Source Library (ASL)</strong> is a structured Dataverse table inside the firm's Microsoft 365 environment holding every verified legal authority the firm relies on. Each record contains: case name, Bluebook citation, court, jurisdiction type, authority classification (binding / persuasive / neutral / distinguished), current status (good law / overruled / limited / questioned / superseded), verification date, the attorney who verified it, a linked PDF, the key holding, and the key quote.</p>
+
+  <p>When the RTF generates a document, it does not ask the AI to find citations. It retrieves them from this table. The AI cannot cite a case not in the table. It cannot mischaracterize a persuasive case as binding. It cannot cite an overruled case. The <em>Mata v. Avianca</em> problem — fabricated citations submitted to a federal court — cannot happen with this architecture.<sup>[7]</sup></p>
+
+  <div class="highlight">
+    <p><strong>Tenant-first rule:</strong> The ASL is always consulted first. An external API (Westlaw, LexisNexis, Bloomberg) is called only when the ASL returns zero records for the relevant practice area and jurisdiction. This rule is enforced by the automation layer — not dependent on attorney discipline under deadline pressure.</p>
+  </div>
+
+  <p>When an external API does surface a new authority, the system logs it to the <strong>ASL Discovery Log</strong> — capturing the citation, the document type that triggered it, the date, and how many times it has appeared. The Knowledge Management Director reviews on a defined cadence. When an authority reaches five appearances without a decision, an automated notification fires. The knowledge base grows from the work the firm is already doing.</p>
+
+  <h3>Layer 3 — The Governance Architecture</h3>
+
+  <p>The governance layer transforms a capable AI tool into a defensible institutional system. It does four things automatically — without depending on any attorney to remember them under deadline pressure.</p>
+
+  <p><strong>Verification Required flags.</strong> Every citation from an external API or attorney-uploaded document carries a non-overridable flag. The flag must be cleared by a named attorney — with identity logged and timestamped — before the document can advance through the approval chain. This is not a reminder. It is an architectural gate.</p>
+
+  <p><strong>Approval routing.</strong> Every document follows a defined path: named supervisor, self-approval with logged accountability, or firm-designated pre-approval bypass. Every decision is logged with attorney identity, timestamp, and document version.</p>
+
+  <p><strong>Document Activity Table.</strong> Every action on every document version is logged permanently: generation initiated, prompt assembled, output produced, flag cleared, approval granted or rejected. The complete audit trail is available on demand.</p>
+
+  <p><strong>Recreate Exact.</strong> Any prior generation event can be re-materialized exactly from stored artifacts — the stored JSON output and the stored Word template reference — without any new AI call. Deterministic reproduction. Not probabilistic re-generation. When a bar association asks how an AI-assisted document was produced, the answer is specific, documented, and deterministic.<sup>[8]</sup></p>
+
+  <h2>What the System Produces: Six Standard Outputs</h2>
+
+  <p>Every generation event produces all six outputs simultaneously from a single set of attorney-provided inputs.</p>
+
+  <ul class="output-list">
+    <li><span class="output-num">01</span><div class="output-text"><strong>Governed First Draft (.docx)</strong><span>Native Word document via Word Online connector. Structure guaranteed by Requirements Prompt. Legal context calibrated by Jurisdictional Prompt. Compatible with Track Changes, Comments, and downstream tools including Harvey, Spellbook, and CoCounsel.</span></div></li>
+    <li><span class="output-num">02</span><div class="output-text"><strong>Counterargument Report</strong><span>Opposing arguments identified, strengths and weaknesses assessed, evidentiary and discretionary risks surfaced. The attorney sees what they will face before they file.</span></div></li>
+    <li><span class="output-num">03</span><div class="output-text"><strong>Strategic Angles Report</strong><span>Three genuinely distinct strategic approaches — not variations of the same argument — each with rationale, strengths, and tradeoffs.</span></div></li>
+    <li><span class="output-num">04</span><div class="output-text"><strong>Cited Authorities Report</strong><span>Every authority cited with source (ASL / External API / Matter Upload), classification, verification status, and jurisdiction. Verification Required flags set automatically for all non-ASL sources.</span></div></li>
+    <li><span class="output-num">05</span><div class="output-text"><strong>ASL Discovery Log Update</strong><span>Admin-facing log of API-sourced authorities not yet in the ASL, sorted by frequency. Automated KMD notification at five appearances without a table decision.</span></div></li>
+    <li><span class="output-num">06</span><div class="output-text"><strong>Ethical Considerations Report</strong><span><em>Premium.</em> Potentially applicable professional responsibility rules scoped to the specific matter, document type, and procedural posture. Surfaces risk — the decision always belongs to the attorney.</span></div></li>
+  </ul>
+
+  <h2>The System Gets Better Over Time</h2>
+
+  <p>The Repeatable Trust Framework™ is not a static tool. Every generation event has the potential to make the system more valuable for every attorney in the firm. The knowledge does not stay with the individual who created it.</p>
+
+  <p>Every verified authority added to the Authority Source Library by any attorney in the firm benefits every other attorney who generates a document in that practice area. Every piece of high-quality approved work product added to the Institutional Work Product Library becomes a reference for every future draft. The output quality is not dependent on the prompting skill of the individual attorney — it is determined by the quality of the knowledge base that was built before they opened the generation form.</p>
+
+  <div style="background:var(--white);border:1px solid var(--border);border-radius:12px;padding:24px 28px;margin:24px 0;border-left:4px solid var(--teal);">
+    <div style="font-size:12px;font-weight:700;color:var(--teal);letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;">Example — Knowledge That Crosses Office Boundaries</div>
+    <p style="font-size:15px;color:#2E3444;margin:0;line-height:1.75;">An attorney in New York verifies a complex federal circuit court authority and adds it to the firm’s Authority Source Library. An attorney in Los Angeles handling a similar matter six months later automatically benefits from that verification — without the two attorneys ever meeting or knowing each other. In a traditional firm, that knowledge transfer would depend on the unlikely chance that two attorneys in different offices happened to connect. In this system, it happens by default.</p>
+  </div>
+
+  <p>The Authority Source Library and the Institutional Work Product Library are stored in Microsoft Dataverse, which supports tens of millions of rows. The knowledge base will never outgrow its architecture. A firm that starts with 50 verified authorities and grows to 50,000 over ten years of practice requires no architectural changes. Size is never the constraint — curation is.</p>
+
+  <h2>What Happens After the Document Is Generated</h2>
+
+  <p>Every prior generation event is saved to the matter's generation history. The attorney can return to any prior event at any time and take one of two actions.</p>
+
+  <div style="display:grid;gap:16px;margin:24px 0 32px;">
+    <div style="border:1px solid var(--border);border-radius:12px;padding:22px 26px;background:var(--white);border-left:4px solid var(--teal);">
+      <div style="font-size:16px;font-weight:700;color:var(--navy);margin-bottom:8px;">Option 1 — Recreate Exact</div>
+      <p style="font-size:14px;color:var(--mid);line-height:1.65;margin:0;">The system re-materializes the exact document from stored artifacts — the stored JSON output and the Word template. No AI is called. The result is byte-for-byte identical to the original. Use this when the original file needs to be recovered, or when a certified audit copy is required.</p>
+    </div>
+    <div style="border:1px solid var(--border);border-radius:12px;padding:22px 26px;background:var(--white);border-left:4px solid var(--gold);">
+      <div style="font-size:16px;font-weight:700;color:var(--navy);margin-bottom:8px;">Option 2 — Continue with Additional Context</div>
+      <p style="font-size:14px;color:var(--mid);line-height:1.65;margin:0 0 10px;">The attorney types new context into a text box — additional facts, a different strategic angle, a response to a counterargument. The system uses the original composite prompt as the base, appends the new context, and calls the AI to generate a new version. The new version is fully governed, fully logged, and linked to the original event.</p>
+      <div style="font-size:13px;color:var(--green);font-weight:600;">✓ The Counterargument Report and Strategic Angles Report each contain a ready-to-use prompt. The attorney can paste it directly into the Additional Context box — or take it to an external platform like Harvey or CoCounsel.</div>
+    </div>
+  </div>
+
+  <h2>How the Repeatable Trust Framework™ Differs From Every Other Legal AI Platform</h2>
+
+  <table class="vs-table">
+    <thead><tr><th>Property</th><th>Generic Legal AI Platforms</th><th>The Repeatable Trust Framework</th></tr></thead>
+    <tbody>
+      <tr><td>Where it runs</td><td>Vendor's cloud. Data leaves the firm.</td><td class="col-rtf"><span class="check">✓</span> Inside the firm's own M365 tenant. Data never leaves.</td></tr>
+      <tr><td>Who owns the technology</td><td>The vendor. Firm is a subscriber.</td><td class="col-rtf"><span class="check">✓</span> The firm's IT team. Maintained internally after handoff.</td></tr>
+      <tr><td>Knowledge base</td><td>Generic corpora. Same for every firm.</td><td class="col-rtf"><span class="check">✓</span> Firm's own verified work product and authorities. Unique to each firm.</td></tr>
+      <tr><td>Citation architecture</td><td>AI generates. 17–34% error rate.</td><td class="col-rtf"><span class="check">✓</span> AI retrieves from verified ASL. Near-zero hallucination rate for table-sourced citations.</td></tr>
+      <tr><td>Governance model</td><td>Policy-based. Attorney-dependent. Fails under deadline pressure.</td><td class="col-rtf"><span class="check">✓</span> Architecture-based. Automatic. Cannot be bypassed.</td></tr>
+      <tr><td>Audit trail</td><td>Limited or absent.</td><td class="col-rtf"><span class="check">✓</span> Complete. Every event logged with identity, timestamp, prompt versions, and full output.</td></tr>
+      <tr><td>Firm standards</td><td>Not encoded. Generic output.</td><td class="col-rtf"><span class="check">✓</span> Encoded in Requirements Prompts authored by the firm's own senior attorneys.</td></tr>
+      <tr><td>Prompt management</td><td>Unversioned. Circulated by email. No governance.</td><td class="col-rtf"><span class="check">✓</span> Embedded in the system. Versioned. Every attorney always uses the current version.</td></tr>
+      <tr><td>Model updates</td><td>Happen on vendor's schedule. Often unannounced.</td><td class="col-rtf"><span class="check">✓</span> Firm controls model version and when upgrades occur. Model changes are auditable events.</td></tr>
+      <tr><td>Institutional knowledge</td><td>Leaves with departing attorneys.</td><td class="col-rtf"><span class="check">✓</span> Encoded in the ASL and knowledge base. Survives every departure.</td></tr>
+      <tr><td>AI training on firm data</td><td>Varies by vendor. Often ambiguous.</td><td class="col-rtf"><span class="check">✓</span> Microsoft-confirmed: prompts and completions not used to train foundation models.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Working Alongside Other Legal AI Tools</h2>
+
+  <p>The Repeatable Trust Framework™ and other legal AI platforms can work alongside each other. Harvey, CoCounsel, Lexis+ AI, and Westlaw are genuinely useful tools. The Repeatable Trust Framework™ does not compete with them — it governs the origin of the document that those tools then extend.</p>
+
+  <p>The distinction is data residency and ownership. The Repeatable Trust Framework™ operates entirely inside the firm’s own Microsoft 365 tenant, keeping data exactly where it already resides. There is no intermediary vendor handling firm data and no per-seat subscription for the AI layer. Even if the original implementer is no longer involved, the system continues to operate exactly as configured — because the firm fully owns the deployment.</p>
+
+  <h2>The Firm Owns Everything — And Can Expand Without Code</h2>
+
+  <p>The Repeatable Trust Framework™ is designed to expand as the firm’s practice evolves. Adding a new practice area, document type, document subtype, or jurisdiction requires no code, no flow modification, and no developer. An administrator opens the Admin Portal and fills out a form. The new item is immediately available in every generation form dropdown across the firm.</p>
+
+  <p>Any law firm with Power Platform technical skill can build this system on their own. The framework is fully documented. The Power Platform makes a deployment that would take a dedicated development team eighteen months to build from scratch achievable in a matter of weeks. The framework removes friction by automating the tedious parts of the process — prompt assembly, citation retrieval, output packaging, approval routing, audit logging — so attorneys spend their time on the work only they can do.</p>
+
+  <h2>The Same Architecture Scales Both Ways</h2>
+
+  <p>The governance architecture does not shrink for smaller firms. The knowledge base does. A 50-record Authority Source Library for a solo Colorado DUI defense attorney is not a limitation — it is precision. The signal is nearly pure because the curation already did the filtering work. A small, well-governed knowledge base outperforms a large, ungoverned one every time.</p>
+
+  <div class="scale-row">
+    <div class="scale-pill"><span class="pill-label">Solo</span><span class="pill-name">1 attorney</span></div>
+    <div class="scale-pill"><span class="pill-label">Small</span><span class="pill-name">2–25</span></div>
+    <div class="scale-pill"><span class="pill-label">Midsize</span><span class="pill-name">25–100</span></div>
+    <div class="scale-pill"><span class="pill-label">Large</span><span class="pill-name">100–300</span></div>
+    <div class="scale-pill"><span class="pill-label">BigLaw</span><span class="pill-name">300+</span></div>
+    <div class="scale-pill"><span class="pill-label">Nonprofit</span><span class="pill-name">No cost</span></div>
+  </div>
+
+  <p>For nonprofits and legal aid organizations, the Repeatable Trust Framework™ is available at no cost to eligible organizations. It runs on Microsoft 365 nonprofit licenses that many organizations already qualify for at no cost. The same architecture that serves a BigLaw firm also serves organizations supporting asylum seekers, domestic violence survivors, and housing‑insecure families.</p>
+
+  <h2>The Quality First Draft Argument</h2>
+
+  <p>The first draft is not better because the AI is smarter. It is better because everything the AI was given before it started was already governed, verified, and firm-specific. Six governance decisions are made before the AI generates a single word:</p>
+
+  <ol style="padding-left:24px; margin-bottom:20px;">
+    <li style="margin-bottom:8px; font-size:16px; color:#2E3444; line-height:1.7;">The Requirements Prompt encodes the firm's drafting standards at the document subtype level — deterministic structure guaranteed.</li>
+    <li style="margin-bottom:8px; font-size:16px; color:#2E3444; line-height:1.7;">The Jurisdictional Prompt calibrates the legal context — pre-verified procedural scope.</li>
+    <li style="margin-bottom:8px; font-size:16px; color:#2E3444; line-height:1.7;">The Authority Source Library eliminates inference about authority weight — human-verified legal intelligence.</li>
+    <li style="margin-bottom:8px; font-size:16px; color:#2E3444; line-height:1.7;">The Institutional Work Product Library provides grounding from the firm's own best prior work — not generic examples.</li>
+    <li style="margin-bottom:8px; font-size:16px; color:#2E3444; line-height:1.7;">The Context Prompt grounds the output in specific matter facts — not generic.</li>
+    <li style="margin-bottom:8px; font-size:16px; color:#2E3444; line-height:1.7;">The client and matter structure scopes every generation event to its correct institutional context.</li>
+  </ol>
+
+  <p>The result is not a better AI output. It is a fundamentally different category of output.</p>
+
+  <div class="callout"><p><em>Prompts generate text. Systems generate trust.</em></p></div>
+
+  <div class="sources">
+    <h4>Sources</h4>
+    <ol>
+      <li>Charlotin, D. AI Hallucination Cases Database. damiencharlotin.com/hallucinations. Updated continuously.</li>
+      <li>Magesh et al. "Hallucination-Free? Assessing the Reliability of Leading AI Legal Research Tools." Journal of Empirical Legal Studies, 2025. Stanford CodeX / Yale Law School.</li>
+      <li>8am Legal Industry Report 2026. 8am.com.</li>
+      <li>8am Legal Industry Report 2026, ibid.</li>
+      <li>NALP. Associate Attrition Rate data. nalp.org.</li>
+      <li>Harvard Law School Center on the Legal Profession. "The Impact of AI on Law Firms' Business Models." February 2025.</li>
+      <li>Mata v. Avianca, Inc., No. 22-cv-1461 (S.D.N.Y. 2023).</li>
+      <li>American Bar Association. Formal Opinion 512: Generative Artificial Intelligence Tools. 2024.</li>
+      <li>Microsoft Azure OpenAI FAQ; Azure Direct Models privacy documentation; Azure OpenAI Service pricing documentation.</li>
+      <li>Microsoft Trust Center. microsoft.com/en-us/trust-center.</li>
+    </ol>
+  </div>
+
+</article>
+</main>
+
+<div class="closing">
+  <p class="tagline">If this framework addresses a problem your firm is experiencing,<br><em>I would like to talk.</em></p>
+  <p class="cta">Reach me at <a href="mailto:jose@joseamezola.com" style="color:var(--gold-light);">jose@joseamezola.com</a></p>
+  <p class="tagline" style="font-size:clamp(16px,2.5vw,22px);margin-top:24px;"><em>Prompts generate text. Systems generate trust.</em></p>
+  <p class="byline">Jose Amezola Beltran · JD · Creator, The Repeatable Trust Framework™ · <a href="mailto:jose@joseamezola.com">jose@joseamezola.com</a></p>
+</div>
 
 </body>
 </html>
-``
